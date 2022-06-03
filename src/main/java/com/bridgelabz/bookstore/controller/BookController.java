@@ -44,14 +44,14 @@ public class BookController {
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/order_ascend")
+    @GetMapping("/order_asc")
     public ResponseEntity<ResponseDTO> sortBookAscendingOrder() {
         List<BookData> bookDataList = iBookService.sortBookAscendingOrder();
         ResponseDTO responseDTO = new ResponseDTO("Get Call Success", bookDataList, null);
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/order_descend")
+    @GetMapping("/order_desc")
     public ResponseEntity<ResponseDTO> sortBookDescendingOrder() {
         List<BookData> bookDataList = iBookService.sortBookDescendingOrder();
         ResponseDTO responseDTO = new ResponseDTO("Get Call Success", bookDataList, null);

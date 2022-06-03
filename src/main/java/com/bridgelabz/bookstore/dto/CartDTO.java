@@ -1,11 +1,12 @@
 package com.bridgelabz.bookstore.dto;
 
-import lombok.ToString;
+import org.springframework.stereotype.Component;
 
-public @ToString class CartDTO {
-	
-	public String User;
-	public String Book;
-	public String quantity;
+import lombok.Data;
 
+@Component
+public @Data class CartDTO {
+    public int userId;
+    public int bookId;
+    public int quantity;
 }
