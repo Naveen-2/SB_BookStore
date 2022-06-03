@@ -9,20 +9,18 @@ public interface IBookService {
 
 	BookData addBook(BookDTO bookDTO);
 
-    List<BookData> showAllBooks();
+    List<BookData> getBookList();
 
-    BookData getBookById(int bookID);
+    BookData getBookById(int bookId);
 
-    void deleteBook(int bookID);
+    List<BookData> sortBookAscendingOrder();
 
-    BookData getBookByName(String bookName);
+    List<BookData> sortBookDescendingOrder();
 
-    BookData updateBook(int bookID, BookDTO bookDTO);
+    BookData updateBookById(int bookId, BookDTO bookDTO);
 
-    List<BookData> sortBookByAsc();
+    BookData updateBookQuantity(int bookId, int bookQuantity);
 
-    List<BookData> sortBookByDesc();
-
-    BookData updateBookQuantity(int bookID, int bookQuantity);
+    void deleteBookById(int bookId);
 	
 }

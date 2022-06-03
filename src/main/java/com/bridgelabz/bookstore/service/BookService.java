@@ -14,63 +14,53 @@ import com.bridgelabz.bookstore.repository.BookRepository;
 public class BookService implements IBookService{
 	
 	@Autowired
-	private BookRepository bookRepository;
+    private BookRepository bookRepository;
 
-	@Override
-	public BookData addBook(BookDTO bookDTO) {
-		BookData bookAdded = new BookData(bookDTO);
-        System.out.println(bookAdded);
-        return bookRepository.save(bookAdded);
-	}
-
-	@Override
-	public List<BookData> showAllBooks() {
-		List<BookData> allBooks = (List<BookData>) bookRepository.findAll();
-        System.out.println("All Books : " + allBooks);
-        return allBooks;
-	}
-
-	@Override
-	public BookData getBookById(int bookID) {
-		return bookRepository.findByBookID(bookID)
-                .orElseThrow(() -> new BookStoreCustomException("Book with id " + bookID + " does not exist in database..!"));
+    @Override
+    public BookData addBook(BookDTO bookDTO) {
+        BookData bookData = new BookData(bookDTO);
+        return bookRepository.save(bookData);
     }
 
-	@Override
-	public void deleteBook(int bookID) {
-		BookData isBookPresent = this.getBookById(bookID);
-		bookRepository.delete(isBookPresent);
-		
-	}
+    @Override
+    public List<BookData> getBookList() {
+        return bookRepository.findAll();
+    }
 
-	@Override
-	public BookData getBookByName(String bookName) {
-		return (BookData) bookRepository.findByBookName(bookName)
-                .orElseThrow(() -> new BookStoreCustomException("Book does not exist in database..!"));
-	}
+    @Override
+    public BookData getBookById(int bookId) {
+        return bookRepository.findById(bookId)
+                             .orElseThrow(() -> new BookStoreCustomException("Book with id " + bookId + " not found"));
+    }
 
-	@Override
-	public BookData updateBook(int bookID, BookDTO bookDTO) {
-		BookData bookData = this.getBookById(bookID);
+    @Override
+    public List<BookData> sortBookAscendingOrder() {
+        return bookRepository.sortBookAscendingOrder();
+    }
+
+    @Override
+    public List<BookData> sortBookDescendingOrder() {
+        return bookRepository.sortBookDescendingOrder();
+    }
+
+    @Override
+    public BookData updateBookById(int bookId, BookDTO bookDTO) {
+        BookData bookData = this.getBookById(bookId);
         bookData.updateBookData(bookDTO);
         return bookRepository.save(bookData);
-	}
+    }
 
-	@Override
-	public List<BookData> sortBookByAsc() {
-		return bookRepository.sortBookAsc();
-	}
-
-	@Override
-	public List<BookData> sortBookByDesc() {
-		return bookRepository.sortBookDesc();
-	}
-
-	@Override
-	public BookData updateBookQuantity(int bookID, int bookQuantity) {
-		BookData bookData = this.getBookById(bookID);
-		bookData.setQuantity(bookQuantity);
+    @Override
+    public BookData updateBookQuantity(int bookId, int bookQuantity) {
+        BookData bookData = this.getBookById(bookId);
+        bookData.setBookQuantity(bookQuantity);
         return bookRepository.save(bookData);
-	}
+    }
+
+    @Override
+    public void deleteBookById(int bookId) {
+        BookData bookData = this.getBookById(bookId);
+        bookRepository.delete(bookData);
+    }
 
 }

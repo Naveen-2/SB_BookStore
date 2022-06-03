@@ -1,18 +1,12 @@
 package com.bridgelabz.bookstore.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public @Data class LoginDTO {
 	
-	private String email;
-    private String password;
-
-    public LoginDTO(String email, String password) {
-        this.email = email;
-        this.password = password;
-    }
-
-    public LoginDTO() {
-    }
-
+    public String email;
+    public String password;
+    
 }

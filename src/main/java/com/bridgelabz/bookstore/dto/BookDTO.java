@@ -1,14 +1,14 @@
 package com.bridgelabz.bookstore.dto;
 
-import lombok.ToString;
+import lombok.Data;
 
-public @ToString class BookDTO {
+public @Data class BookDTO {
 	
 	public String bookName;
-	public String authorName;
-	public String bookDescription;
-	public String bookImg;
-	public long price;
-	public int quantity;
+    public String bookAuthor;
+    public String bookDescription;
+    public String bookImage;
+    public int bookPrice;
+    public int bookQuantity;
 	
 }

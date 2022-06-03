@@ -1,7 +1,6 @@
 package com.bridgelabz.bookstore.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,14 +11,10 @@ import com.bridgelabz.bookstore.model.BookData;
 @Repository
 public interface BookRepository extends JpaRepository<BookData, Integer>{
 	
-	Optional<BookData>  findByBookID(int bookID);
+	@Query(value = "SELECT * FROM book_table order by book_name ASC", nativeQuery = true)
+    List<BookData> sortBookAscendingOrder();
 
-    Optional<Object> findByBookName(String bookName);
-    
-    @Query(value = "SELECT * FROM books order by price ASC", nativeQuery = true)
-    List<BookData> sortBookAsc();
-    
-    @Query(value = "SELECT * FROM books order by price DESC ", nativeQuery = true)
-    List<BookData> sortBookDesc();
+    @Query(value = "SELECT * FROM book_table order by book_name DESC", nativeQuery = true)
+    List<BookData> sortBookDescendingOrder();
     
 }

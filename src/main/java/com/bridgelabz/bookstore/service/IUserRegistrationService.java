@@ -2,12 +2,9 @@ package com.bridgelabz.bookstore.service;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.bridgelabz.bookstore.dto.ForgotPasswordDTO;
 import com.bridgelabz.bookstore.dto.LoginDTO;
-import com.bridgelabz.bookstore.dto.ResponseDTO;
 import com.bridgelabz.bookstore.dto.UserRegistrationDTO;
 import com.bridgelabz.bookstore.model.UserRegistrationData;
 
@@ -15,23 +12,16 @@ import com.bridgelabz.bookstore.model.UserRegistrationData;
 public interface IUserRegistrationService {
 	
 	
-	List<UserRegistrationData> getAllUserData();
+	List<UserRegistrationData> getUserRegistrationData();
 
-	UserRegistrationData getUserByID(int userID);
-	
-	UserRegistrationData getUserByEmail(String email);
-	
-	UserRegistrationData updateUserData(int userID, UserRegistrationDTO userRegistrationDTO);
-	
+    UserRegistrationData getUserRegistrationDataByUserId(int userId);
 
+    UserRegistrationData createUserRegistrationData(UserRegistrationDTO userRegistrationDTO);
 
-	ResponseEntity<ResponseDTO> registerUser(UserRegistrationDTO userRegistrationDTO);
-	
-	ResponseEntity<ResponseDTO> forgotPassword(ForgotPasswordDTO forgotPasswordDTO);
+    UserRegistrationData updateUserRegistrationData(int userId, UserRegistrationDTO userRegistrationDTO);
 
-    ResponseEntity<ResponseDTO> verify(String token);
+    UserRegistrationData getUserByEmailId(String email);
 
-    ResponseEntity<ResponseDTO> loginUser(LoginDTO loginDTO);
-
-	
+    UserRegistrationData userLogin(LoginDTO loginDTO);
+    
 }

@@ -13,18 +13,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bridgelabz.bookstore.Util.TokenUtil;
 import com.bridgelabz.bookstore.dto.LoginDTO;
 import com.bridgelabz.bookstore.dto.ResponseDTO;
 import com.bridgelabz.bookstore.dto.UserRegistrationDTO;
-import com.bridgelabz.bookstore.exceptions.BookStoreCustomException;
 import com.bridgelabz.bookstore.model.UserRegistrationData;
 import com.bridgelabz.bookstore.service.IUserRegistrationService;
 
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserRegistrationController {
@@ -32,67 +31,52 @@ public class UserRegistrationController {
 	@Autowired
     private IUserRegistrationService iUserRegistrationService;
 	
-	@GetMapping(value = {"/getAllUsers"})
-	public ResponseEntity<ResponseDTO> readdata() throws BookStoreCustomException {
-        List<UserRegistrationData> users = null;
-        users = iUserRegistrationService.getAllUserData();
-        if (users.size() > 0) {
-        	ResponseDTO responseDTO = new ResponseDTO("all user Fetched successfully", users,null);
-            return new ResponseEntity<>(responseDTO, HttpStatus.OK);
-        } else {
-            throw new BookStoreCustomException("No Data Found");
-        }
+	@Autowired
+	private TokenUtil tokenUtil;
+	
+	
+	@GetMapping(value = {"", "/"})
+    public ResponseEntity<ResponseDTO> getUserRegistrationData() {
+        List<UserRegistrationData> userRegistrationDataList = iUserRegistrationService.getUserRegistrationData();
+        ResponseDTO responseDTO = new ResponseDTO("Get Call Success", userRegistrationDataList);
+        return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
 
-	@GetMapping(value = {"/getUserByEmail/{emailID}"})
-	public ResponseEntity<ResponseDTO> getUsersByEmail(@PathVariable String emailID) {
-        UserRegistrationData userData = null;
-        userData = iUserRegistrationService.getUserByEmail(emailID);
-
-        if (userData != null) {
-        	ResponseDTO response = new ResponseDTO("Get Call Users List By email is Successful", userData,null);
-            return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
-        } else {
-            log.info("email id block");
-            throw new BookStoreCustomException("No Data Found");
-        }
+    @GetMapping("/get_by_id/{userId}")
+    public ResponseEntity<ResponseDTO> getUserRegistrationDataById(@PathVariable("userId") int userId) {
+        UserRegistrationData userRegistrationData = iUserRegistrationService.getUserRegistrationDataByUserId(userId);
+        ResponseDTO responseDTO = new ResponseDTO("Get Call Success for Id", userRegistrationData);
+        return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
 
-	@GetMapping(value = {"/getUserByID/{userID}"})
-    public ResponseEntity<ResponseDTO> getUserByID(@PathVariable("userId") int userID) {
-		
-		UserRegistrationData users = iUserRegistrationService.getUserByID(userID);
-
-        if (users!=null) {
-        	ResponseDTO responseDTO = new ResponseDTO("User Fetched successfully", users,null);
-            return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
-        } else {
-            throw new BookStoreCustomException("No Data Found");
-        }
+    @GetMapping("/get_by_email")
+    public ResponseEntity<ResponseDTO> getUserByEmailId(@RequestParam("email") String email) {
+        UserRegistrationData userRegistrationData = iUserRegistrationService.getUserByEmailId(email);
+        ResponseDTO responseDTO = new ResponseDTO("Get Call Success for Email", userRegistrationData);
+        return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
 
-	@PutMapping("/updateUser/{userId}")
+    @PostMapping("/create")
+    public ResponseEntity<ResponseDTO> createUserRegistrationData(@Valid @RequestBody UserRegistrationDTO userRegistrationDTO) {
+        UserRegistrationData userRegistrationData = iUserRegistrationService.createUserRegistrationData(userRegistrationDTO);
+        String token = tokenUtil.createToken(userRegistrationData.getUserId());
+        ResponseDTO responseDTO = new ResponseDTO("Created User Registration Data", userRegistrationData, token);
+        return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("/user_login")
+    public ResponseEntity<ResponseDTO> userLogin(@RequestBody LoginDTO loginDTO) {
+        iUserRegistrationService.userLogin(loginDTO);
+        ResponseDTO responseDTO = new ResponseDTO("Login Successful", loginDTO);
+        return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+    }
+
+    @PutMapping("/update/{userId}")
     public ResponseEntity<ResponseDTO> updateUserRegistrationDate(@PathVariable("userId") int userId,
                                                                   @Valid @RequestBody UserRegistrationDTO userRegistrationDTO) {
-		
-		UserRegistrationData userData = iUserRegistrationService.updateUserData(userId, userRegistrationDTO);
-		ResponseDTO response = new ResponseDTO("Updated user data for", userData,null);
-        return new ResponseEntity<ResponseDTO>(response, HttpStatus.OK);
-
-    }
-	
-	@PostMapping("/register")
-	public ResponseEntity<ResponseDTO> createAccount(@RequestBody UserRegistrationDTO userDTO){
-	    return iUserRegistrationService.registerUser(userDTO);
-	}
-	
-	@PostMapping("/login")
-    public ResponseEntity<ResponseDTO> userLogin(@RequestBody LoginDTO logindTO) {
-        return iUserRegistrationService.loginUser(logindTO);
-    }
-    @GetMapping("/verify/{token}")
-    public ResponseEntity<ResponseDTO> verifyUser(@PathVariable String token) {
-        return iUserRegistrationService.verify(token);
+        UserRegistrationData userRegistrationData = iUserRegistrationService.updateUserRegistrationData(userId, userRegistrationDTO);
+        ResponseDTO responseDTO = new ResponseDTO("Updated User Registration Data for Id", userRegistrationData);
+        return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
 	
 	@PostMapping(value = {"/forgotPassword"})

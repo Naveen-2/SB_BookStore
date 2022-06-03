@@ -12,45 +12,46 @@ import com.bridgelabz.bookstore.dto.BookDTO;
 import lombok.Data;
 
 @Entity
-@Table(name="books")
+@Table(name="book_table")
 public @Data class BookData {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "book_id")
-	private int bookID;
-	
-	@Column(name = "book_name")
-	private String bookName;
-	
-	@Column(name = "author_name")
-	private String authorName;
-	
-	@Column(name = "book_desc")
-	private String bookDescription;
-	
-	@Column(name = "book_img")
-	private String bookImg;
-	
-	@Column(name = "price")
-	private long price;
-	
-	@Column(name = "quantity")
-	private int quantity;
-	
-	public BookData() {}
-	
-	public BookData(BookDTO bookDTO) {
-		this.updateBookData(bookDTO);		
-	}
-	
-	public void updateBookData(BookDTO bookDTO) {
-		this.bookName = bookDTO.bookName;
-		this.authorName = bookDTO.authorName;
-		this.bookDescription = bookDTO.bookDescription;
-		this.bookImg = bookDTO.bookImg;
-		this.price = bookDTO.price;
-		this.quantity = bookDTO.quantity;
-	}
+    private int bookId;
+
+    @Column(name = "book_name")
+    private String bookName;
+
+    @Column(name = "book_author")
+    private String bookAuthor;
+
+    @Column(name = "book_description")
+    private String bookDescription;
+
+    @Column(name = "book_image")
+    private String bookImage;
+
+    @Column(name = "book_price")
+    private int bookPrice;
+
+    @Column(name = "book_quantity")
+    private int bookQuantity;
+
+    public BookData() {
+    }
+
+    public BookData(BookDTO bookDTO) {
+        this.updateBookData(bookDTO);
+    }
+
+    public void updateBookData(BookDTO bookDTO) {
+        this.bookName = bookDTO.bookName;
+        this.bookAuthor = bookDTO.bookAuthor;
+        this.bookDescription = bookDTO.bookDescription;
+        this.bookImage = bookDTO.bookImage;
+        this.bookPrice = bookDTO.bookPrice;
+        this.bookQuantity = bookDTO.bookQuantity;
+    }
 	
 }
