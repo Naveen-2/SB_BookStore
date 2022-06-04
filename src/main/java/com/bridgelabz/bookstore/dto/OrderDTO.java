@@ -2,16 +2,15 @@ package com.bridgelabz.bookstore.dto;
 
 import java.time.LocalDate;
 
-import lombok.ToString;
+import lombok.Data;
 
-public @ToString class OrderDTO {
+public @Data class OrderDTO {
 
-	public LocalDate date = LocalDate.now();
-	public String price;
-	public String quantity;
-	public String address;
-	public String user;
-	public String book;
-	public boolean cancel;
+	public int userId;
+    public int bookId;
+    public String address;
+    public LocalDate orderDate = LocalDate.now();
+    public int totalPrice;
+    public boolean cancel;
 
 }

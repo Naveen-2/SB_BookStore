@@ -1,6 +1,5 @@
 package com.bridgelabz.bookstore.controller;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +20,12 @@ import com.bridgelabz.bookstore.dto.ResponseDTO;
 import com.bridgelabz.bookstore.model.BookData;
 import com.bridgelabz.bookstore.service.IBookService;
 
-
 @RestController
 @RequestMapping("/book")
 public class BookController {
 	
 	@Autowired
 	public IBookService iBookService;
-	
 	
 	@GetMapping(value = {"", "/"})
     public ResponseEntity<ResponseDTO> getBooksList() {
@@ -41,6 +38,13 @@ public class BookController {
     public ResponseEntity<ResponseDTO> getBookById(@PathVariable("bookId") int bookId) {
         BookData bookData = iBookService.getBookById(bookId);
         ResponseDTO responseDTO = new ResponseDTO("Get Call Success for Id", bookData, null);
+        return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
+    }
+    
+    @GetMapping("/get_by_author/{bookAuthor}")
+    public ResponseEntity<ResponseDTO> getBookByAuthor(@PathVariable("bookAuthor") String bookAuthor) {
+        List<BookData> bookDataList = iBookService.getBookByAuthor(bookAuthor);
+        ResponseDTO responseDTO = new ResponseDTO("Getting books by author", bookDataList, null);
         return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
     }
 

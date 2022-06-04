@@ -4,57 +4,64 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.bridgelabz.bookstore.dto.OrderDTO;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 @Entity
 @Table(name="orders")
-public class OrderData {
+public @Data class OrderData {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "order_id")
     private int orderId;
 
-	@Column(name = "user")
-	private String user;
-	
-	@Column(name = "book")
-	private String book;
-	
-	@Column(name = "quantity")
-	private String quantity;
-	
-	@Column(name = "price")
-	private String price;
-	
-	@Column(name = "address")
-	private String address;
-	
-	@Column(name = "date")
-	private LocalDate date = LocalDate.now();
-	
-	@Column(name = "cancel_status")
-	private boolean cancel;
-	
-	public OrderData() {}
-	
-	public OrderData(OrderDTO orderDTO) {
-		this.updateOrderData(orderDTO);
-	}
-	
-	public void updateOrderData(OrderDTO orderDTO) {
-		this.user = orderDTO.user;
-		this.book = orderDTO.book;
-		this.quantity = orderDTO.quantity;
-		this.price = orderDTO.price;
-		this.address = orderDTO.address;
-		this.date = orderDTO.date;
-		this.cancel = orderDTO.cancel;
-	}
+    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserRegistrationData userId;
+
+    @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id")
+    private BookData bookId;
+
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "order_date")
+    private LocalDate orderDate = LocalDate.now();
+
+    @Column(name = "total_price")
+    private int totalPrice;
+
+    @Column(name = "cancel")
+    private boolean cancel;
+
+    public OrderData(UserRegistrationData userId, BookData bookId, OrderDTO orderDTO) {
+        this.userId = userId;
+        this.bookId = bookId;
+        orderData(orderDTO);
+    }
+
+    public void orderData(OrderDTO orderDTO) {
+        this.address = orderDTO.address;
+        this.orderDate = orderDTO.orderDate;
+        this.totalPrice = orderDTO.totalPrice;
+        this.cancel = orderDTO.cancel;
+    }
 	
 }

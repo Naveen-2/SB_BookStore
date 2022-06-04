@@ -16,6 +16,8 @@ public interface IBookService {
     List<BookData> sortBookAscendingOrder();
 
     List<BookData> sortBookDescendingOrder();
+    
+    List<BookData> getBookByAuthor(String bookAuthor);
 
     BookData updateBookById(int bookId, BookDTO bookDTO);
 
